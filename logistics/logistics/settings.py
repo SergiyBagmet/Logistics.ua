@@ -10,23 +10,45 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import environ
+import os
 from pathlib import Path
+
+from environ import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env = environ.Env()
+environ.Env.read_env()
+
+
+def get_env_variable(var_name):
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = "set the %s environment variable" % var_name
+        raise ImproperlyConfigured(error_msg)
+
+
+DATABASE_PG_NAME = env("DATABASE_PG_NAME")
+DATABASE_PG_USER = env("DATABASE_PG_USER")
+DATABASE_PG_PASSWORD = env("DATABASE_PG_PASSWORD")
+DATABASE_PG_HOST = env("DATABASE_PG_HOST")
+DATABASE_PG_PORT = env("DATABASE_PG_PORT")
+
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-*+a5a73n0sly^8(^#t$)m+)go8k9hc06k=e@q)6zo94j)d@5n@"
+SECRET_KEY = get_env_variable('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -69,17 +91,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "logistics.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": DATABASE_PG_NAME,
+        "USER": DATABASE_PG_USER,
+        "PASSWORD": DATABASE_PG_PASSWORD,
+        "HOST": DATABASE_PG_HOST,
+        "PORT": DATABASE_PG_PORT,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -99,7 +123,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -110,7 +133,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
