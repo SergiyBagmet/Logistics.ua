@@ -15,6 +15,23 @@ files = [
 tests = ["mypy (>=0.800)", "pytest", "pytest-asyncio"]
 
 [[package]]
+name = "dj-rest-auth"
+version = "5.0.2"
+description = "Authentication and Registration in Django Rest Framework"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "dj-rest-auth-5.0.2.tar.gz", hash = "sha256:aad7d912476169e9991547bf98645344d3939be2d7052098048d819524c115d9"},
+]
+
+[package.dependencies]
+Django = ">=3.2"
+djangorestframework = ">=3.13.0"
+
+[package.extras]
+with-social = ["django-allauth (>=0.56.0,<0.58.0)"]
+
+[[package]]
 name = "django"
 version = "4.2.10"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
@@ -128,4 +145,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "179c3cc2174482e4601b603514c1ac3fb0f853029216c1c9b42df851267c9500"
+content-hash = "54c0a8b7a3d9a6d9e7e7ac0b271cf0a3946b55437022dd08a8e86a49ef08c44d"
