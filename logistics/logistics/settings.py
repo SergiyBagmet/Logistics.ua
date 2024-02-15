@@ -64,18 +64,40 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "dj_rest_auth",
+    "dj_rest_auth.registration",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
-    "dj_rest_auth.registration",
     "users.apps.UsersConfig",
 ]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ]
+}
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.meta.ua"
+EMAIL_USE_TLS = False
+EMAIL_PORT = 465
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# <EMAIL_CONFIRM_REDIRECT_BASE_URL>/<key>
+EMAIL_CONFIRM_REDIRECT_BASE_URL = \
+    "http://localhost:3000/email/confirm/"
+
+# <PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL>/<uidb64>/<token>/
+PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = \
+    "http://localhost:3000/password-reset/confirm/"
+
 SITE_ID = 1
-ACCOUNT_EMAIL_REQUIRED = False
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_AUTHENTICATION_METHOD = "username"
-ACCOUNT_EMAIL_VERIFICATION = "optional"
 
 REST_AUTH = {
     "OLD_PASSWORD_FIELD_ENABLED": True,
